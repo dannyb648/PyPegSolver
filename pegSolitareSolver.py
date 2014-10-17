@@ -184,7 +184,7 @@ def pickMove():
     global movePickedX
     global movePickedY
     global a
-    randomMove = numpy.random(0,a)
+    randomMove = numpy.random.random_intergers(a)
     movePickedX = moveList[randomMove][0]
     movePickedY = moveList[randomMove][1]
     

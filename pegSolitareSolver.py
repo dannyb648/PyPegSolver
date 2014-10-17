@@ -3,7 +3,7 @@
 Created on Mon Oct 06 20:34:28 2014
 
 @author: DannyB648
-Version: 0.2
+Version: 0.3
 
 Purpose of this script is to play games of Peg Solitaire randomly until it successfully
 completes the game. It will then print out the successful game moves to a .txt file.
@@ -35,10 +35,9 @@ movePickedX = 0
 movePickedY = 0
 checkHorizontally = True
 game = 0
-textFile = ""
+textFile = "" 
 # Key for gameBoard Array: 0 = Empty, 1 = Peg, 2 = Void.
-def resetBoard():
-    #global textFile   #Variable defined as you use it, so no need to pre-define textFile.
+def resetBoard(textFile):    
     textFile = open("game %d.txt" % game, "w")
     gameBoard[0][0] = 2
     gameBoard[0][1] = 2
@@ -89,25 +88,18 @@ def resetBoard():
     gameBoard[6][4] = 1
     gameBoard[6][5] = 2
     gameBoard[6][6] = 2
-    return textFile
+    return textFile #This returns textFile variable
     
-def possibleMoves():
-
-    global x
-    global y
-    global a
-    global checkHorizontally
+def possibleMoves(x, y, a, checkHorizonally):
     x = 0
     y = 0
     checkHorizontally = True
-    while x < 7 and y < 7: #This allows x and/or y to become >6 at some point, and you have an array from [0] to [6]. Will cause "index out of range."
-        print x
-        print y
+    while x < 7 and y < 7:
         checkHorizontally = True
         if(x + 2 == 7):
             y = y + 1
         else:
-            if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):  #Not checking if x+1 or x+2 or y+1 or y+2 is < 6. Index out of range.
+            if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):
                 saveMoveLeft()
                 x = x + 1
             elif(gameBoard[x][y] == 0 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 1):
@@ -115,7 +107,7 @@ def possibleMoves():
                 x = x + 1
             else:
                 x = x + 1
-    while(x < 7 and y < 7): #same as above.
+    while(x < 7 and y < 7):
         checkHorizontally = False
         if(y + 2 == 7):
             x = x + 1
@@ -128,12 +120,9 @@ def possibleMoves():
                 y = y + 1  
             else:
                 y = y + 1
+    return x, y, a, checkHorizonally
 
-def saveMoveLeft():
-    global x
-    global y
-    global a
-    global checkHorizontally
+def saveMoveLeft(x, y, a, checkHorizonally):
     moveList[a][0] = x
     moveList[a][1] = y
     if(checkHorizontally == True):
@@ -142,11 +131,7 @@ def saveMoveLeft():
         moveList[a][2] = False
     a = a + 1
     
-def saveMoveRight():
-    global x
-    global y
-    global a
-    global checkHorizontally
+def saveMoveRight(x, y, a, checkHorizonally):
     moveList[a][0] = x
     moveList[a][1] = y
     if(checkHorizontally == True):
@@ -154,12 +139,9 @@ def saveMoveRight():
     else:
         moveList[a][2] = False
     a = a + 1
-    
-def saveMoveUp():
-    global x
-    global y
-    global a
-    global checkHorizontally
+    return x, y, a, checkHorizonally
+
+def saveMoveUp(x, y, a, checkHorizonally):
     moveList[a][0] = x
     moveList[a][1] = y
     if(checkHorizontally == True):
@@ -167,12 +149,9 @@ def saveMoveUp():
     else:
         moveList[a][2] = False
     a = a + 1
+    return x, y, a, checkHorizonally
     
-def saveMoveDown():
-    global x
-    global y
-    global a
-    global checkHorizontally
+def saveMoveDown(x, y, a, checkHorizonally):
     moveList[a][0] = x
     moveList[a][1] = y
     if(checkHorizontally == True):
@@ -181,21 +160,19 @@ def saveMoveDown():
         moveList[a][2] = 0
     a = a + 1
     moveList
+    return x, y, a, checkHorizonally
     
-def pickMove():
+def pickMove(movePickedX, movePickedY, a):
     randomMove = 0
     global movePickedX
     global movePickedY
     global a
-
-    if a > 0:
-        randomMove = numpy.random.random_integers(a) #pick random number.
-
+    randomMove = numpy.random.random_intergers(a)
     movePickedX = moveList[randomMove][0]
     movePickedY = moveList[randomMove][1]
+    return x, y, a, checkHorizonally
     
 def executeMove(textFile):
-#    global textFile
     if(moveList[a][2] == True):
         if(moveList[a][3] == True):
              gameBoard[movePickedX][movePickedY] = 0
@@ -221,11 +198,9 @@ def executeMove(textFile):
              gameBoard[movePickedX + 1][movePickedY] = 0
              gameBoard[movePickedX + 2][movePickedY] = 0
              textFile.write("X: %d , Y: %d to X: %d , Y: %d \n" %(movePickedX, movePickedY + 2, movePickedX, movePickedY))
+    return textFile
 
-def evaluate(textFile):
-    global x
-    global y
-    #global textFile
+def evaluate(textFile, x , y):
     pegsLeft = 0
     x = 0
     y = 0
@@ -245,11 +220,10 @@ def evaluate(textFile):
             playGame()
     else:
         playRound()        
-            
+    return textFile, x, y
 
     
 def playRound(textFile):
-
     possibleMoves()
     pickMove()
     executeMove(textFile)
@@ -257,7 +231,7 @@ def playRound(textFile):
     
 def playGame(game):
     game = game + 1
-    txtFile = resetBoard() #variable txtFile now equal to return value of resetBoard. return should be a file object.
-    playRound(txtFile)
+    resetBoard()
+    playRound()
     
 playGame(game)

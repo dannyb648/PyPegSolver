@@ -100,12 +100,14 @@ def possibleMoves():
     x = 0
     y = 0
     checkHorizontally = True
-    while x < 7 and y < 7:
+    while x < 7 and y < 7: #This allows x and/or y to become >6 at some point, and you have an array from [0] to [6]. Will cause "index out of range."
+        print x
+        print y
         checkHorizontally = True
         if(x + 2 == 7):
             y = y + 1
         else:
-            if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):
+            if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):  #Not checking if x+1 or x+2 or y+1 or y+2 is < 6. Index out of range.
                 saveMoveLeft()
                 x = x + 1
             elif(gameBoard[x][y] == 0 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 1):
@@ -113,7 +115,7 @@ def possibleMoves():
                 x = x + 1
             else:
                 x = x + 1
-    while(x < 7 and y < 7):
+    while(x < 7 and y < 7): #same as above.
         checkHorizontally = False
         if(y + 2 == 7):
             x = x + 1

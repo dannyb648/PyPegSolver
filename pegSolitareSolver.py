@@ -35,10 +35,10 @@ movePickedX = 0
 movePickedY = 0
 checkHorizontally = True
 game = 0
-textFile = 0
+textFile = ""
 # Key for gameBoard Array: 0 = Empty, 1 = Peg, 2 = Void.
 def resetBoard():
-    global textFile    
+    #global textFile   #Variable defined as you use it, so no need to pre-define textFile.
     textFile = open("game %d.txt" % game, "w")
     gameBoard[0][0] = 2
     gameBoard[0][1] = 2
@@ -89,6 +89,7 @@ def resetBoard():
     gameBoard[6][4] = 1
     gameBoard[6][5] = 2
     gameBoard[6][6] = 2
+    return textFile
     
 def possibleMoves():
 
@@ -184,12 +185,15 @@ def pickMove():
     global movePickedX
     global movePickedY
     global a
-    randomMove = numpy.random.random_intergers(a)
+
+    if a > 0:
+        randomMove = numpy.random.random_integers(a) #pick random number.
+
     movePickedX = moveList[randomMove][0]
     movePickedY = moveList[randomMove][1]
     
-def executeMove():
-    global textFile
+def executeMove(textFile):
+#    global textFile
     if(moveList[a][2] == True):
         if(moveList[a][3] == True):
              gameBoard[movePickedX][movePickedY] = 0
@@ -216,10 +220,10 @@ def executeMove():
              gameBoard[movePickedX + 2][movePickedY] = 0
              textFile.write("X: %d , Y: %d to X: %d , Y: %d \n" %(movePickedX, movePickedY + 2, movePickedX, movePickedY))
 
-def evaluate():
+def evaluate(textFile):
     global x
     global y
-    global textFile
+    #global textFile
     pegsLeft = 0
     x = 0
     y = 0
@@ -242,16 +246,16 @@ def evaluate():
             
 
     
-def playRound():
+def playRound(textFile):
+
     possibleMoves()
     pickMove()
-    executeMove()
-    evaluate()
+    executeMove(textFile)
+    evaluate(textFile)
     
-def playGame():
-    global game
+def playGame(game):
     game = game + 1
-    resetBoard()
-    playRound()
+    txtFile = resetBoard() #variable txtFile now equal to return value of resetBoard. return should be a file object.
+    playRound(txtFile)
     
-playGame()
+playGame(game)

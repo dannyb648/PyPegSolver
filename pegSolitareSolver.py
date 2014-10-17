@@ -35,10 +35,10 @@ movePickedX = 0
 movePickedY = 0
 checkHorizontally = True
 game = 0
-textFile = 0
+textFile = ""
 # Key for gameBoard Array: 0 = Empty, 1 = Peg, 2 = Void.
 def resetBoard():
-    global textFile    
+    #global textFile   #Variable defined as you use it, so no need to pre-define textFile.
     textFile = open("game %d.txt" % game, "w")
     gameBoard[0][0] = 2
     gameBoard[0][1] = 2
@@ -89,6 +89,7 @@ def resetBoard():
     gameBoard[6][4] = 1
     gameBoard[6][5] = 2
     gameBoard[6][6] = 2
+    return textFile
     
 def possibleMoves():
 
@@ -99,12 +100,14 @@ def possibleMoves():
     x = 0
     y = 0
     checkHorizontally = True
-    while x < 7 and y < 7:
+    while x < 7 and y < 7: #This allows x and/or y to become >6 at some point, and you have an array from [0] to [6]. Will cause "index out of range."
+        print x
+        print y
         checkHorizontally = True
         if(x + 2 == 7):
             y = y + 1
         else:
-            if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):
+            if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):  #Not checking if x+1 or x+2 or y+1 or y+2 is < 6. Index out of range.
                 saveMoveLeft()
                 x = x + 1
             elif(gameBoard[x][y] == 0 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 1):
@@ -112,7 +115,7 @@ def possibleMoves():
                 x = x + 1
             else:
                 x = x + 1
-    while(x < 7 and y < 7):
+    while(x < 7 and y < 7): #same as above.
         checkHorizontally = False
         if(y + 2 == 7):
             x = x + 1
@@ -184,12 +187,15 @@ def pickMove():
     global movePickedX
     global movePickedY
     global a
-    randomMove = numpy.random(0,a)
+
+    if a > 0:
+        randomMove = numpy.random.random_integers(a) #pick random number.
+
     movePickedX = moveList[randomMove][0]
     movePickedY = moveList[randomMove][1]
     
-def executeMove():
-    global textFile
+def executeMove(textFile):
+#    global textFile
     if(moveList[a][2] == True):
         if(moveList[a][3] == True):
              gameBoard[movePickedX][movePickedY] = 0
@@ -216,10 +222,10 @@ def executeMove():
              gameBoard[movePickedX + 2][movePickedY] = 0
              textFile.write("X: %d , Y: %d to X: %d , Y: %d \n" %(movePickedX, movePickedY + 2, movePickedX, movePickedY))
 
-def evaluate():
+def evaluate(textFile):
     global x
     global y
-    global textFile
+    #global textFile
     pegsLeft = 0
     x = 0
     y = 0
@@ -242,16 +248,16 @@ def evaluate():
             
 
     
-def playRound():
+def playRound(textFile):
+
     possibleMoves()
     pickMove()
-    executeMove()
-    evaluate()
+    executeMove(textFile)
+    evaluate(textFile)
     
-def playGame():
-    global game
+def playGame(game):
     game = game + 1
-    resetBoard()
-    playRound()
+    txtFile = resetBoard() #variable txtFile now equal to return value of resetBoard. return should be a file object.
+    playRound(txtFile)
     
-playGame()
+playGame(game)

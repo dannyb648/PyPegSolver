@@ -96,7 +96,7 @@ def possibleMoves(x, y, a, checkHorizontally):
     checkHorizontally = True
     while x <= 6 and y <= 6:
         checkHorizontally = True
-        if(x + 2 == 6):
+        if(x + 2 > 6):
             y = y + 1
         else:
             if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):
@@ -164,6 +164,7 @@ def saveMoveDown(x, y, a, checkHorizontally):
     
 def pickMove(movePickedX, movePickedY, a):
     randomMove = numpy.random.random_integers(0 , a)
+#   randomMove = numpy.random.random_integers(b)
     movePickedX = moveList[randomMove - 1][0]
     movePickedY = moveList[randomMove - 1][1]
     return movePickedX, movePickedY, a
@@ -213,9 +214,9 @@ def evaluate(textFile, x , y):
             textFile.write("SUCCESS! I have solved the game of Peg Solitare!")
             sys.exit()
         else:
-            playGame(game)
+            playGame()
     else:
-        playRound(textFile)        
+        playRound()        
     return textFile, x, y
 
     

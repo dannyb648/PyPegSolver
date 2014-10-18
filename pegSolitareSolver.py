@@ -90,13 +90,13 @@ def resetBoard(textFile):
     gameBoard[6][6] = 2
     return textFile #This returns textFile variable
     
-def possibleMoves(x, y, a, checkHorizonally):
+def possibleMoves(x, y, a, checkHorizontally):
     x = 0
     y = 0
     checkHorizontally = True
-    while x < 7 and y < 7:
+    while x <= 6 and y <= 6:
         checkHorizontally = True
-        if(x + 2 == 7):
+        if(x + 2 == 6):
             y = y + 1
         else:
             if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):
@@ -107,9 +107,9 @@ def possibleMoves(x, y, a, checkHorizonally):
                 x = x + 1
             else:
                 x = x + 1
-    while(x < 7 and y < 7):
+    while(x <= 6 and y <= 6):
         checkHorizontally = False
-        if(y + 2 == 7):
+        if(y + 2 > 6):
             x = x + 1
         else:
             if(gameBoard[x][y] == 1 and gameBoard[x][y + 1] == 1 and gameBoard[x][y + 2] == 0):
@@ -120,9 +120,9 @@ def possibleMoves(x, y, a, checkHorizonally):
                 y = y + 1  
             else:
                 y = y + 1
-    return x, y, a, checkHorizonally
+    return x, y, a, checkHorizontally
 
-def saveMoveLeft(x, y, a, checkHorizonally):
+def saveMoveLeft(x, y, a, checkHorizontally):
     moveList[a][0] = x
     moveList[a][1] = y
     if(checkHorizontally == True):
@@ -131,7 +131,7 @@ def saveMoveLeft(x, y, a, checkHorizonally):
         moveList[a][2] = False
     a = a + 1
     
-def saveMoveRight(x, y, a, checkHorizonally):
+def saveMoveRight(x, y, a, checkHorizotnally):
     moveList[a][0] = x
     moveList[a][1] = y
     if(checkHorizontally == True):
@@ -139,9 +139,9 @@ def saveMoveRight(x, y, a, checkHorizonally):
     else:
         moveList[a][2] = False
     a = a + 1
-    return x, y, a, checkHorizonally
+    return x, y, a, checkHorizontally
 
-def saveMoveUp(x, y, a, checkHorizonally):
+def saveMoveUp(x, y, a, checkHorizontally):
     moveList[a][0] = x
     moveList[a][1] = y
     if(checkHorizontally == True):
@@ -149,9 +149,9 @@ def saveMoveUp(x, y, a, checkHorizonally):
     else:
         moveList[a][2] = False
     a = a + 1
-    return x, y, a, checkHorizonally
+    return x, y, a, checkHorizontally
     
-def saveMoveDown(x, y, a, checkHorizonally):
+def saveMoveDown(x, y, a, checkHorizontally):
     moveList[a][0] = x
     moveList[a][1] = y
     if(checkHorizontally == True):
@@ -160,17 +160,13 @@ def saveMoveDown(x, y, a, checkHorizonally):
         moveList[a][2] = 0
     a = a + 1
     moveList
-    return x, y, a, checkHorizonally
+    return x, y, a, checkHorizontally
     
 def pickMove(movePickedX, movePickedY, a):
-    randomMove = 0
-    global movePickedX
-    global movePickedY
-    global a
-    randomMove = numpy.random.random_intergers(a)
-    movePickedX = moveList[randomMove][0]
-    movePickedY = moveList[randomMove][1]
-    return x, y, a, checkHorizonally
+    randomMove = numpy.random.random_integers(0 , a)
+    movePickedX = moveList[randomMove - 1][0]
+    movePickedY = moveList[randomMove - 1][1]
+    return movePickedX, movePickedY, a
     
 def executeMove(textFile):
     if(moveList[a][2] == True):
@@ -217,21 +213,21 @@ def evaluate(textFile, x , y):
             textFile.write("SUCCESS! I have solved the game of Peg Solitare!")
             sys.exit()
         else:
-            playGame()
+            playGame(game)
     else:
-        playRound()        
+        playRound(textFile)        
     return textFile, x, y
 
     
 def playRound(textFile):
-    possibleMoves()
-    pickMove()
+    possibleMoves(x, y, a, checkHorizontally)
+    pickMove(movePickedX, movePickedY, a)
     executeMove(textFile)
-    evaluate(textFile)
+    evaluate(textFile,x,y)
     
 def playGame(game):
     game = game + 1
-    resetBoard()
-    playRound()
+    resetBoard(textFile)
+    playRound(textFile)
     
 playGame(game)

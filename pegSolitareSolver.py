@@ -25,6 +25,8 @@ STARTING PEG POSITION
 import numpy
 import sys
 
+sys.setrecursionlimit(3000)
+
 gameBoard = numpy.array(range(49)).reshape((7, 7))
 moveList = numpy.array(range(132)).reshape((33,4))
 
@@ -36,6 +38,8 @@ movePickedY = 0
 checkHorizontally = True
 game = 0
 textFile = "" 
+unsolved = True
+gamesPlayed = 0
 # Key for gameBoard Array: 0 = Empty, 1 = Peg, 2 = Void.
 def resetBoard(textFile):    
     textFile = open("game %d.txt" % game, "w")
@@ -197,7 +201,10 @@ def executeMove(textFile):
              textFile.write("X: %d , Y: %d to X: %d , Y: %d \n" %(movePickedX, movePickedY + 2, movePickedX, movePickedY))
     return textFile
 
-def evaluate(textFile, x , y):
+"""
+Why not use a while loop to run the evaluation, to ensure each cell is checked?
+"""
+def evaluate(textFile, x , y, unsolved):
     pegsLeft = 0
     x = 0
     y = 0
@@ -206,29 +213,31 @@ def evaluate(textFile, x , y):
             pegsLeft = pegsLeft + 1
         if(x < 6):
             x = x + 1
-        if(x == 6):
+        if(x == 7):
             y = y + 1
             x = 0
     if(pegsLeft == 1):
         if(gameBoard[3][3] == 1):
             textFile.write("SUCCESS! I have solved the game of Peg Solitare!")
+            unsolved = False
             sys.exit()
         else:
-            playGame()
-    else:
-        playRound()        
-    return textFile, x, y
+            unsolved = True
+    return textFile, x, y, unsolved
 
     
 def playRound(textFile):
     possibleMoves(x, y, a, checkHorizontally)
     pickMove(movePickedX, movePickedY, a)
     executeMove(textFile)
-    evaluate(textFile,x,y)
+    evaluate(textFile,x,y,unsolved)
     
 def playGame(game):
     game = game + 1
     resetBoard(textFile)
     playRound(textFile)
     
-playGame(game)
+while unsolved == True:    
+    playGame(game)
+    print gamesPlayed
+    gamesPlayed = gamesPlayed + 1

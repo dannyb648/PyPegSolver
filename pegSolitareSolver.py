@@ -27,23 +27,23 @@ import sys
 
 sys.setrecursionlimit(3000)
 
-gameBoard = numpy.array(range(49)).reshape((7, 7))
-moveList = numpy.array(range(132)).reshape((33,4))
+gameBoard = numpy.array(range(49)).reshape((7, 7)) #Generates the game board array.
+moveList = numpy.array(range(132)).reshape((33,4)) #Generates an array to store data about moves.
 
 x = 0 #X coord on board
 y = 0 #Y coord on board
 a = 0 #Interation on move list array
-movePickedX = 0
-movePickedY = 0
-checkHorizontally = True
-game = 0
+movePickedX = 0 #stores x coord for move selected.
+movePickedY = 0 #stores y coord for moove selected.
+checkHorizontally = True #stores if checker is going horizontally or vertically
+game = 0 #stores number of games played by program
 textFile = "" 
 unsolved = True
 gamesPlayed = 0
 # Key for gameBoard Array: 0 = Empty, 1 = Peg, 2 = Void.
-def resetBoard(textFile):    
-    textFile = open("game %d.txt" % game, "w")
-    gameBoard[0][0] = 2
+def resetBoard(textFile, game):    
+    textFile = open("game %d.txt" % game, "w") #opens new text file to store game in.
+    gameBoard[0][0] = 2 #sets up the game board as listed in the header
     gameBoard[0][1] = 2
     gameBoard[0][2] = 1
     gameBoard[0][3] = 1
@@ -92,38 +92,48 @@ def resetBoard(textFile):
     gameBoard[6][4] = 1
     gameBoard[6][5] = 2
     gameBoard[6][6] = 2
-    return textFile #This returns textFile variable
+    return textFile, game #This returns textFile variable
     
 def possibleMoves(x, y, a, checkHorizontally):
-    x = 0
-    y = 0
+    x = 0 #stores current x coord
+    y = 0 #stores current y coord
     checkHorizontally = True
-    while x <= 6 and y <= 6:
-        checkHorizontally = True
-        if(x + 2 > 6):
-            y = y + 1
-        else:
+    possibleMoves = 0
+    while x <= 6 and y <= 6: #checks if whole board has been checked
+        checkHorizontally = True #if it hasnt, keep checking on the horizontal plane.
+        if(x + 2 > 6): #checks if the peg selected can make a valid move still
+            y = y + 1 #if so it drops on the y coord.
+            x = 0 #reset x?
+        else: #if we can make a valid move.
             if(gameBoard[x][y] == 1 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 0):
                 saveMoveLeft()
+                possibleMoves += 1
                 x = x + 1
             elif(gameBoard[x][y] == 0 and gameBoard[x + 1][y] == 1 and gameBoard[x + 2][y] == 1):
                 saveMoveRight()
+                possibleMoves += 1
                 x = x + 1
             else:
                 x = x + 1
     while(x <= 6 and y <= 6):
         checkHorizontally = False
         if(y + 2 > 6):
-            x = x + 1
+            x = x + 1 #if so it moves along the x coord
+            y = 0 #should y be reset?
         else:
             if(gameBoard[x][y] == 1 and gameBoard[x][y + 1] == 1 and gameBoard[x][y + 2] == 0):
-                saveMoveDown()
+                saveMoveDown() #if there is a valid move, save it
+                possibleMoves += 1
                 y = y + 1
             elif(gameBoard[x][y] == 0 and gameBoard[x][y + 1] == 1 and gameBoard[x][y + 2] == 1):
                 saveMoveUp()
+                possibleMoves += 1
                 y = y + 1  
             else:
                 y = y + 1
+                
+    if(possibleMoves == 0)
+    #ADD
     return x, y, a, checkHorizontally
 
 def saveMoveLeft(x, y, a, checkHorizontally):
@@ -223,9 +233,11 @@ def evaluate(textFile, x , y, unsolved):
             sys.exit()
         else:
             unsolved = True
-    return textFile, x, y, unsolved
+    return textFile, x, y, unsolved 
 
-    
+'''
+This section of code above needs rewriting to different logic.
+'''    
 def playRound(textFile):
     possibleMoves(x, y, a, checkHorizontally)
     pickMove(movePickedX, movePickedY, a)
@@ -234,8 +246,9 @@ def playRound(textFile):
     
 def playGame(game):
     game = game + 1
-    resetBoard(textFile)
-    playRound(textFile)
+    resetBoard(textFile, game)
+    while gameFinished == False
+    	playRound(textFile)
     
 while unsolved == True:    
     playGame(game)

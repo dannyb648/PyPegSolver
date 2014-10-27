@@ -120,7 +120,7 @@ def possibleMoves(x, y, a, checkHorizontally, gameFinished):
                 x = x + 1
             else:
                 x = x + 1
-    while(x <= 6 and y <= 6):
+    while(x <= 6 and y <= 6):#Replace with for loop like in Eval.
         checkHorizontally = False
         if(y + 2 > 6):
             x = x + 1 #if so it moves along the x coord
@@ -149,12 +149,13 @@ def possibleMoves(x, y, a, checkHorizontally, gameFinished):
 def saveMoveLeft(x, y, a, checkHorizontally):
     moveList[a][0] = x
     moveList[a][1] = y
-    print("ARGGGGGGGGGGGGGH!!!!!!!!!!!!!!!!!!!!!!!!")
+    print("ARGGGGGGGGGGGGGH!!!!!!!!!!!!!!!!!!!!!!!!")#DEBUG
     if(checkHorizontally == True):
         moveList[a][2] = True
     else:
         moveList[a][2] = False
     a = a + 1
+    return x, y, a, checkHorizontally
     
 def saveMoveRight(x, y, a, checkHorizotnally):
     moveList[a][0] = x
@@ -252,6 +253,7 @@ def playRound(textFile):
     pickMove(movePickedX, movePickedY, a)
     executeMove(textFile, movePickedX, movePickedY)
     evaluate(textFile, unsolved)
+    return textFile 
     
 def playGame(game):
     game = game + 1

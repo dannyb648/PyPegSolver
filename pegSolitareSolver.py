@@ -7,24 +7,18 @@ Version: 0.3
 
 Purpose of this script is to play games of Peg Solitaire randomly until it successfully
 completes the game. It will then print out the successful game moves to a .txt file.
+"""
 
-
-
-STARTING PEG Pimport random
+import random
 
 gameBoard = [[9,9,1,1,1,9,9,],\
              [9,9,1,1,1,9,9,],\
              [1,1,1,1,1,1,1,],\
-             [1,1,1,1,1,1,1,],\
              [1,1,1,0,1,1,1,],\
+             [1,1,1,1,1,1,1,],\
              [9,9,1,1,1,9,9,],\
              [9,9,1,1,1,9,9,]]
 
-"""
-savedMoves = [[x,y,H/V]
-"""
-
-             
 movesPossible = 0
 
 yPicked = 0

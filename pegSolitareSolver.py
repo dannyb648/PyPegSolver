@@ -88,13 +88,15 @@ Functions
 """
 
 def resetBoard():
-    gameBoard = [[9,9,0,0,0,9,9,],\
-                 [9,9,0,0,0,9,9,],\
-                 [0,0,0,0,0,0,0,],\
-                 [0,0,0,1,0,0,0,],\
-                 [0,0,0,0,0,0,0,],\
-                 [9,9,0,0,0,9,9,],\
-                 [9,9,0,0,0,9,9,]]
+    gameBoard = [[9,9,1,1,1,9,9,],\
+                 [9,9,1,1,1,9,9,],\
+                 [1,1,1,1,1,1,1,],\
+                 [1,1,1,0,1,1,1,],\
+                 [1,1,1,1,1,1,1,],\
+                 [9,9,1,1,1,9,9,],\
+                 [9,9,1,1,1,9,9,]]
+
+    return gameBoard
 
 def resetMovesList():
     movesList = [[9,9,9],\
@@ -238,25 +240,36 @@ def evaluateBoard(gameBoard, pegSolved):
 """
 Actual Sequence
 """
+
+
 pegSolved = False
 gameFinished = False
 
-while pegSolved == False:
-    resetBoard()
-    resetMovesList()
-    while gameFinished == False:
-        movesPossible, gamesBoard, movesList = checkMoves(movesPossible, gameBoard, movesList)
-        if(movesPossible == 0):
-            print"END"
-            gameFinished = True
-            break
-        movesPossible, movesList, yPicked, xPicked, dPicked, move = pickMove(movesPossible, movesList, yPicked, xPicked, dPicked, move)
-        gameBoard, movesList, yPicked, xPicked, dPicked, move = executeMove(gameBoard, movesList, yPicked, xPicked, dPicked, move)  
-    gameBoard, pegSolved = evaluateBoard(gameBoard, pegSolved)
-    print gameBoard
-    print pegSolved
-    time.sleep(2)
-    if(pegSolved == True):
-        break
 
-print "SUCCESS! Check how to Solve Peg Solitare!"
+def play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move):
+    while pegSolved == False:
+        gameBoard = resetBoard()
+        print"RESETING BOARD"
+        resetMovesList()
+        gameFinished = False
+        while gameFinished == False:
+            movesPossible, gamesBoard, movesList = checkMoves(movesPossible, gameBoard, movesList)
+            if(movesPossible == 0):
+                print"END"
+                gameFinished = True
+                break
+                print"END OF ROUND"
+            movesPossible, movesList, yPicked, xPicked, dPicked, move = pickMove(movesPossible, movesList, yPicked, xPicked, dPicked, move)
+            gameBoard, movesList, yPicked, xPicked, dPicked, move = executeMove(gameBoard, movesList, yPicked, xPicked, dPicked, move)  
+        gameBoard, pegSolved = evaluateBoard(gameBoard, pegSolved)
+        print gameBoard
+        print pegSolved
+        time.sleep(2)
+        if(pegSolved == True):
+            print"SUCESS"
+        else:
+            play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move)
+
+    print "SUCCESS! Check how to Solve Peg Solitare!"
+
+play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move)

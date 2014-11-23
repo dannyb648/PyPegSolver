@@ -26,13 +26,13 @@ dPicked = 0
 
 move = 0
 
-gameBoard = [[9,9,1,1,1,9,9,],\
-                 [9,9,1,1,1,9,9,],\
-                 [1,1,1,1,1,1,1,],\
-                 [1,1,1,0,1,1,1,],\
-                 [1,1,1,1,1,1,1,],\
-                 [9,9,1,1,1,9,9,],\
-                 [9,9,1,1,1,9,9,]]
+gameBoard = [[9,9,0,0,0,9,9,],\
+                 [9,9,0,0,0,9,9,],\
+                 [0,0,1,0,0,0,0,],\
+                 [0,0,1,1,1,0,0,],\
+                 [0,0,1,0,0,0,0,],\
+                 [9,9,0,0,0,9,9,],\
+                 [9,9,0,0,0,9,9,]]
 
 movesList = [[9,9,9],\
                  [9,9,9],\
@@ -97,8 +97,7 @@ def resetBoard():
                  [1,1,1,0,1,1,1,],\
                  [1,1,1,1,1,1,1,],\
                  [9,9,1,1,1,9,9,],\
-                 [9,9,1,1,1,9,9,]]
-    
+                 [9,9,1,1,1,9,9,]]   
     return gameBoard
 
 def resetMovesList():
@@ -299,7 +298,7 @@ def play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, 
             movesPossible, movesList, yPicked, xPicked, dPicked, move = pickMove(movesPossible, movesList, yPicked, xPicked, dPicked, move)
             gameBoard, movesList, yPicked, xPicked, dPicked, move, pyPegResults = executeMove(gameBoard, movesList, yPicked, xPicked, dPicked, move, pyPegResults)  
         gameBoard, pegSolved, pegsLeft = evaluateBoard(gameBoard, pegSolved, pegsLeft)
-        time.sleep(2)
+        time.sleep(0.00000000000000000000001)
 
         if(pegsLeft == 1 and gameBoard[3][3] == 1):
             print"SUCCESS"
@@ -310,6 +309,7 @@ def play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, 
             pyPegResults.write(gamesPlayedStr)
             pyPegResults.write(" Games before I solved it!")
             pyPegResults.close()
+            pegSolved = True
             break
         else:
             pyPegResults.write("Game Lost!")
@@ -319,7 +319,9 @@ def play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, 
             pyPegResults.write(gamesPlayedStr)
             pyPegResults.write(" Games so far!")
             pyPegResults.close()
-            play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move, pegsLeft, pyPegResults, gamesPlayed)
+            print gameBoard
+            #play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move, pegsLeft, pyPegResults, gamesPlayed)
     print "SUCCESS! Check how to Solve Peg Solitare!"
-
-play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move, pegsLeft, pyPegResults, gamesPlayed)
+    return pegSolved
+while pegSolved == False: #DEBUG
+    pegSolved = play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move, pegsLeft, pyPegResults, gamesPlayed)

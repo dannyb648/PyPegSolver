@@ -10,6 +10,7 @@ completes the game. It will then print out the successful game moves to a .txt f
 """
 
 import random
+import time
 
 """
 Variable Declarations
@@ -23,9 +24,6 @@ xPicked = 0
 dPicked = 0
 
 move = 0
-
-gameFinished = False              
-gameSolved = False
 
 gameBoard = [[9,9,1,1,1,9,9,],\
             [9,9,1,1,1,9,9,],\
@@ -184,21 +182,10 @@ def checkMoves(movesPossible, gameBoard, movesList):
             x = x + 1
         y = y + 1
     print "movesPossible = ",movesPossible
-    if(movesPossible == 0):
-        print "Moves left = 0 - EVALUATE!" #DEBUG
-        gameBoard, gameFinished, gameSolved = evauateGame(gameBoard, gameFinished, gameSolved)
-        
+    
     return movesPossible, gameBoard, movesList
 
 def pickMove(movesPossible, movesList, yPicked, xPicked, dPicked, move):
-"""
-    if (movesPossible == 1):
-        yPicked = movesList[1][1]
-        xPicked = movesList[1][2]
-        dPicked = movesList[1][0]
-        movesPossible = 0
-    else:
-"""
     move = random.randint(0, movesPossible - 1)
     yPicked = movesList[move][1]
     xPicked = movesList[move][2]
@@ -233,44 +220,43 @@ def executeMove(gameBoard, movesList, yPicked, xPicked, dPicked, move):
         print "ERROR, Neither V nor H in MoveList!"
     return gameBoard, movesList, yPicked, xPicked, dPicked, move
 
-def evauateGame(gameBoard, gameFinished, gameSolved):
-    y = 0
-    x = 0
+
+def evaluateBoard(gameBoard, pegSolved):
     pegsLeft = 0
-    print "Evaluating Game!"
-    for i in range(0,7):
-        for j in range(0,7):
-            if(gameBoard[y][x] == 1):
+    for a in range(0,7):
+        for b in range(0,7):
+            if(gameBoard[a][b] == 1):
                 pegsLeft = pegsLeft + 1
-                print "peg"
-            j = j + 1
-        i = i + 1
-    print "pegsLeft = ",pegsLeft
-    print gameBoard
-    if(pegsLeft == 1):
-        print gameBoard
-        if(gameBoard[3][3] == 1):
-            print "Success!"
-            gameSolved = True
-            print gameBoard
-        else:
-            print "Failure...Restarting!"
-            gameFinished = True
-            print gameBoard
-    print "More than one peg left :", pegsLeft
-    return gameBoard, gameFinished, gameSolved
-        
+            b = b + 1
+        a = a + 1
+    if(pegsLeft == 1 and gameBoard[3][3] == 1):
+        pegSolved == True
+    print"Pegs Left: ",pegsLeft
+    return gameBoard, pegSolved
         
 
 """
 Actual Sequence
 """
+pegSolved = False
+gameFinished = False
 
-while gameSolved == False:
+while pegSolved == False:
     resetBoard()
     resetMovesList()
     while gameFinished == False:
         movesPossible, gamesBoard, movesList = checkMoves(movesPossible, gameBoard, movesList)
+        if(movesPossible == 0):
+            print"END"
+            gameFinished = True
+            break
         movesPossible, movesList, yPicked, xPicked, dPicked, move = pickMove(movesPossible, movesList, yPicked, xPicked, dPicked, move)
         gameBoard, movesList, yPicked, xPicked, dPicked, move = executeMove(gameBoard, movesList, yPicked, xPicked, dPicked, move)  
-        print gameBoard #DEBUG
+    gameBoard, pegSolved = evaluateBoard(gameBoard, pegSolved)
+    print gameBoard
+    print pegSolved
+    time.sleep(2)
+    if(pegSolved == True):
+        break
+
+print "SUCCESS! Check how to Solve Peg Solitare!"

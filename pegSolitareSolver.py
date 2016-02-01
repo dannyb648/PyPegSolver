@@ -285,7 +285,8 @@ gamesPlayed = 0
 def play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move, pegsLeft, pyPegResults, gamesPlayed):
     while pegSolved == False:
         pyPegResults = open("pyPegResults.txt","w")
-        print"Games Played: ", gamesPlayed
+        if(gamesPlayed % 100000 == 0):
+              print"Games Played: ", gamesPlayed
         gameBoard = resetBoard()
         resetMovesList()
         gameFinished = False
@@ -319,7 +320,6 @@ def play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, 
             pyPegResults.write(gamesPlayedStr)
             pyPegResults.write(" Games so far!")
             pyPegResults.close()
-            print gameBoard
             #play(pegSolved, gameFinished, movesPossible, gameBoard, movesList, yPicked, xPicked, dPicked, move, pegsLeft, pyPegResults, gamesPlayed)
     print "SUCCESS! Check how to Solve Peg Solitare!"
     return pegSolved
